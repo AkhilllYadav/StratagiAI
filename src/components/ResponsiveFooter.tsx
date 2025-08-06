@@ -18,7 +18,7 @@ const ResponsiveFooter = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold">IntelMarkForge</span>
+              <span className="text-xl font-bold">StratagiAI</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               AI-powered marketing strategy platform helping businesses create winning campaigns with confidence.
@@ -107,11 +107,11 @@ const ResponsiveFooter = () => {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm text-center md:text-left">
-              © 2024 IntelMarkForge. All rights reserved. Powered by Gemini AI.
+              © 2025 StratagiAI. All rights reserved.
             </div>
             
             <div className="flex items-center space-x-4">
-              <span className="text-gray-400 text-xs">Made with ❤️ for marketers</span>
+              <span className="text-gray-400 text-xs">Made by Akhilesh ❤️ for marketers</span>
               <Button 
                 variant="ghost" 
                 size="sm" 

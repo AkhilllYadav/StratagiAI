@@ -1,9 +1,10 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Menu, X, Share, Download, User, Settings, LogOut } from "lucide-react";
+import { Brain, Menu, X, Share, Download, User, Settings, LogOut, Zap, Star, TrendingUp, MessageCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,72 +21,109 @@ interface ResponsiveNavbarProps {
 
 const ResponsiveNavbar = ({ showBackButton, onShare, onExport }: ResponsiveNavbarProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
   const isAuthPage = location.pathname.includes('/auth');
   const isLandingPage = location.pathname === '/';
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
-    <header className="border-b border-gray-800 bg-black shadow-sm sticky top-0 z-50">
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
-        <div className="flex items-center justify-between">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-200/20' : 'bg-transparent'}`}>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo Section */}
-          <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 sm:flex-none">
-            <Link to="/" className="flex items-center space-x-2 sm:space-x-3 min-w-0">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
-                <Brain className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-black" />
+          <div className="flex items-center space-x-3">
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                <div className="relative w-10 h-10 rounded-xl flex items-center justify-center">
+                  <img src="/logo.png" alt="StratagiAI Logo" className="w-full h-full object-contain" />
+                </div>
               </div>
-              <div className="min-w-0">
-                <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white truncate">StrategIQ</h1>
-                <p className="text-gray-300 text-xs sm:text-sm hidden md:block truncate">AI-Powered Marketing Strategy Platform</p>
+              <div className="hidden sm:block">
+                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">StratagiAI</h1>
+                <p className="text-sm text-gray-600">Marketing Intelligence</p>
               </div>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-4 xl:space-x-6">
-            {!isLandingPage && !isAuthPage && (
+          <nav className="hidden lg:flex items-center space-x-8">
+            {!isLandingPage && !isAuthPage ? (
               <>
-                <Link to="/app" className="text-gray-300 hover:text-white transition-colors whitespace-nowrap">
+                <Link to="/app" className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105">
                   Dashboard
                 </Link>
-                <Link to="/app/create" className="text-gray-300 hover:text-white transition-colors whitespace-nowrap">
+                <Link to="/app/create" className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105">
                   Create Strategy
                 </Link>
-                <Link to="/app/strategies" className="text-gray-300 hover:text-white transition-colors whitespace-nowrap">
+                <Link to="/app/strategies" className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105">
                   My Strategies
                 </Link>
-                <Link to="/app/help" className="text-gray-300 hover:text-white transition-colors whitespace-nowrap">
-                  Help
+                <Link to="/app/help" className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105">
+                  Support
                 </Link>
+              </>
+            ) : (
+              <>
+                <a href="#features" className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105">
+                  Features
+                </a>
+                <a href="#use-cases" className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105">
+                  Use Cases
+                </a>
+                <a href="#testimonials-section" className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105">
+                  Reviews
+                </a>
+                <a href="#pricing" className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105">
+                  Pricing
+                </a>
               </>
             )}
           </nav>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4">
-            {/* Badge */}
-            <Badge variant="secondary" className="bg-gray-800 text-gray-200 border-gray-700 hidden md:flex text-xs">
+          <div className="flex items-center space-x-2 lg:space-x-4">
+            {/* Trust Badge */}
+            <Badge variant="secondary" className="hidden lg:flex bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border-0 font-medium">
+              <Zap className="w-3 h-3 mr-1" />
               AI Powered
             </Badge>
 
             {/* Action Buttons - Show on strategy pages */}
             {(onShare || onExport) && (
-              <div className="hidden sm:flex items-center space-x-1 lg:space-x-2">
+              <div className="hidden sm:flex items-center space-x-2">
                 {onShare && (
-                  <Button variant="outline" size="sm" onClick={onShare} className="border-gray-700 text-gray-300 hover:text-white hover:border-gray-600">
-                    <Share className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">Share</span>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={onShare} 
+                    className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:text-purple-700 transition-all duration-200"
+                  >
+                    <Share className="w-4 h-4" />
                   </Button>
                 )}
                 {onExport && (
-                  <Button variant="outline" size="sm" onClick={onExport} className="border-gray-700 text-gray-300 hover:text-white hover:border-gray-600">
-                    <Download className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">Export</span>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={onExport} 
+                    className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:text-purple-700 transition-all duration-200"
+                  >
+                    <Download className="w-4 h-4" />
                   </Button>
                 )}
               </div>
@@ -95,21 +133,25 @@ const ResponsiveNavbar = ({ showBackButton, onShare, onExport }: ResponsiveNavba
             {!isLandingPage && !isAuthPage && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="hidden sm:flex text-gray-300 hover:text-white">
-                    <User className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden lg:inline">Account</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="hidden sm:flex items-center space-x-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all duration-200"
+                  >
+                    <User className="w-4 h-4" />
+                    <span className="hidden lg:inline font-medium">Account</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-gray-900 border-gray-700">
+                <DropdownMenuContent align="end" className="w-56 bg-white border-gray-200 shadow-xl">
                   <DropdownMenuItem asChild>
-                    <Link to="/app/settings" className="flex items-center text-gray-300 hover:text-white">
+                    <Link to="/app/settings" className="flex items-center text-gray-700 hover:text-purple-600">
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-gray-700" />
+                  <DropdownMenuSeparator className="bg-gray-200" />
                   <DropdownMenuItem asChild>
-                    <Link to="/" className="flex items-center text-red-400 hover:text-red-300">
+                    <Link to="/" className="flex items-center text-red-600 hover:text-red-700">
                       <LogOut className="w-4 h-4 mr-2" />
                       Sign Out
                     </Link>
@@ -118,131 +160,178 @@ const ResponsiveNavbar = ({ showBackButton, onShare, onExport }: ResponsiveNavba
               </DropdownMenu>
             )}
 
-            {/* Auth Buttons - Show on landing page */}
+            {/* Enhanced CTA Buttons - Show on landing page */}
             {isLandingPage && (
-              <div className="hidden sm:flex items-center space-x-1 lg:space-x-2">
-                <Link to="/auth">
-                  <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:text-white hover:border-gray-600">
+              <div className="hidden sm:flex items-center space-x-3">
+                <Link to="/auth/login">
+                  <Button variant="ghost" size="sm" className="text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all duration-200">
                     Sign In
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button size="sm" className="bg-white text-black hover:bg-gray-200">
-                    Get Started
+                  <Button 
+                    size="sm" 
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                  >
+                    Start Free Trial
                   </Button>
                 </Link>
               </div>
             )}
 
-            {/* Mobile Menu Button */}
+            {/* Enhanced Mobile Menu Button */}
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={toggleMobileMenu}
-              className="lg:hidden text-gray-300 hover:text-white p-1 sm:p-2"
+              className="lg:hidden text-gray-700 hover:text-purple-600 transition-all duration-200"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Enhanced Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t border-gray-800 pt-4">
-            <nav className="flex flex-col space-y-3">
-              {!isLandingPage && !isAuthPage ? (
-                <>
-                  <Link 
-                    to="/app" 
-                    className="text-gray-300 hover:text-white transition-colors py-2 px-2 rounded"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link 
-                    to="/app/create" 
-                    className="text-gray-300 hover:text-white transition-colors py-2 px-2 rounded"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Create Strategy
-                  </Link>
-                  <Link 
-                    to="/app/strategies" 
-                    className="text-gray-300 hover:text-white transition-colors py-2 px-2 rounded"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    My Strategies
-                  </Link>
-                  <Link 
-                    to="/app/help" 
-                    className="text-gray-300 hover:text-white transition-colors py-2 px-2 rounded"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Help
-                  </Link>
-                  
-                  <div className="pt-3 border-t border-gray-800">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg border-b border-gray-200/20 shadow-xl">
+            <div className="px-4 py-6">
+              <nav className="flex flex-col space-y-1">
+                {!isLandingPage && !isAuthPage ? (
+                  <>
                     <Link 
-                      to="/app/settings" 
-                      className="flex items-center text-gray-300 hover:text-white transition-colors py-2 px-2 rounded"
+                      to="/app" 
+                      className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Settings
+                      <TrendingUp className="w-5 h-5" />
+                      <span className="font-medium">Dashboard</span>
                     </Link>
                     <Link 
-                      to="/" 
-                      className="flex items-center text-red-400 hover:text-red-300 transition-colors py-2 px-2 rounded"
+                      to="/app/create" 
+                      className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Sign Out
+                      <Zap className="w-5 h-5" />
+                      <span className="font-medium">Create Strategy</span>
                     </Link>
-                  </div>
-                  
-                  {/* Mobile Action Buttons */}
-                  {(onShare || onExport) && (
-                    <div className="pt-3 border-t border-gray-800 space-y-2">
-                      {onShare && (
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={onShare} 
-                          className="w-full border-gray-700 text-gray-300 hover:text-white hover:border-gray-600"
-                        >
-                          <Share className="w-4 h-4 mr-2" />
-                          Share Strategy
-                        </Button>
-                      )}
-                      {onExport && (
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={onExport} 
-                          className="w-full border-gray-700 text-gray-300 hover:text-white hover:border-gray-600"
-                        >
-                          <Download className="w-4 h-4 mr-2" />
-                          Export Strategy
-                        </Button>
-                      )}
+                    <Link 
+                      to="/app/strategies" 
+                      className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Star className="w-5 h-5" />
+                      <span className="font-medium">My Strategies</span>
+                    </Link>
+                    <Link 
+                      to="/app/help" 
+                      className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      <span className="font-medium">Support</span>
+                    </Link>
+                    
+                    <div className="pt-4 mt-4 border-t border-gray-200 space-y-1">
+                      <Link 
+                        to="/app/settings" 
+                        className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Settings className="w-5 h-5" />
+                        <span className="font-medium">Settings</span>
+                      </Link>
+                      <Link 
+                        to="/" 
+                        className="flex items-center space-x-3 text-red-600 hover:text-red-700 hover:bg-red-50 px-4 py-3 rounded-lg transition-all duration-200"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <LogOut className="w-5 h-5" />
+                        <span className="font-medium">Sign Out</span>
+                      </Link>
                     </div>
-                  )}
-                </>
-              ) : isLandingPage ? (
-                <div className="space-y-2">
-                  <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" size="sm" className="w-full border-gray-700 text-gray-300 hover:text-white hover:border-gray-600">
-                      Sign In
-                    </Button>
-                  </Link>
-                  <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                    <Button size="sm" className="w-full bg-white text-black hover:bg-gray-200">
-                      Get Started
-                    </Button>
-                  </Link>
-                </div>
-              ) : null}
-            </nav>
+                    
+                    {/* Mobile Action Buttons */}
+                    {(onShare || onExport) && (
+                      <div className="pt-4 mt-4 border-t border-gray-200 space-y-3">
+                        {onShare && (
+                          <Button 
+                            variant="outline" 
+                            size="lg"
+                            onClick={onShare} 
+                            className="w-full border-purple-200 text-purple-600 hover:bg-purple-50"
+                          >
+                            <Share className="w-4 h-4 mr-2" />
+                            Share Strategy
+                          </Button>
+                        )}
+                        {onExport && (
+                          <Button 
+                            variant="outline" 
+                            size="lg"
+                            onClick={onExport} 
+                            className="w-full border-purple-200 text-purple-600 hover:bg-purple-50"
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Export Strategy
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </>
+                ) : isLandingPage ? (
+                  <div className="space-y-1">
+                    <a 
+                      href="#features" 
+                      className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Zap className="w-5 h-5" />
+                      <span className="font-medium">Features</span>
+                    </a>
+                    <a 
+                      href="#use-cases" 
+                      className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <TrendingUp className="w-5 h-5" />
+                      <span className="font-medium">Use Cases</span>
+                    </a>
+                    <a 
+                      href="#testimonials" 
+                      className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Star className="w-5 h-5" />
+                      <span className="font-medium">Reviews</span>
+                    </a>
+                    <a 
+                      href="#pricing" 
+                      className="flex items-center space-x-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition-all duration-200"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      <span className="font-medium">Pricing</span>
+                    </a>
+                    
+                    <div className="pt-4 mt-4 border-t border-gray-200 space-y-3">
+                      <Link to="/auth/login" onClick={() => setMobileMenuOpen(false)}>
+                        <Button variant="outline" size="lg" className="w-full text-purple-600 border-purple-200 hover:bg-purple-50">
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                        <Button 
+                          size="lg"
+                          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700"
+                        >
+                          Start Free Trial
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                ) : null}
+              </nav>
+            </div>
           </div>
         )}
       </div>

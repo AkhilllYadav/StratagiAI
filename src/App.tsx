@@ -23,7 +23,7 @@ const AppContent = () => {
     <div className="min-h-screen gradient-soft">
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/auth/*" element={<AuthPage />} />
         <Route path="/app" element={<Dashboard />} />
         <Route path="/app/create" element={<Index />} />
         <Route path="/app/strategies" element={<SavedStrategies />} />

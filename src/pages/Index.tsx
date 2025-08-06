@@ -153,7 +153,7 @@ const Index = () => {
       />
 
       {/* Progress Indicator - Enhanced for mobile */}
-      <div className="container mx-auto px-4 py-6 lg:py-8">
+      <div className="container mx-auto px-4 py-8 sm:py-10 lg:py-12 pt-48">
         {/* Mobile Progress Bar */}
         <div className="lg:hidden mb-6">
           <Card className="glass-card shadow-soft">

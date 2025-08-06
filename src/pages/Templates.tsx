@@ -160,7 +160,7 @@ const Templates = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 sm:py-10 lg:py-12 pt-20 sm:pt-24">
         {/* Search and Filter */}
         <Card className="glass-card shadow-soft mb-8">
           <CardContent className="pt-6">

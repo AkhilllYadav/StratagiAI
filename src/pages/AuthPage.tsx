@@ -3,6 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Brain, Github } from "lucide-react";
+import axios from 'axios'; // Import axios
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { toast } from 'sonner'; // Import toast for notifications
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,15 +17,50 @@ const AuthPage = () => {
     confirmPassword: ''
   });
 
+  const navigate = useNavigate(); // Initialize navigate
+
+  // Define your API base URL
+  const API_BASE_URL = 'http://localhost:5000'; // Replace with your backend URL
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate loading
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsLoading(false);
-    console.log('Form submitted', formData);
+    try {
+      if (isLogin) {
+        // Login logic
+        const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+          email: formData.email,
+          password: formData.password,
+        });
+        console.log('Login successful', response.data);
+        toast.success('Login successful!');
+        // Redirect to dashboard or home page after successful login
+        navigate('/dashboard'); // Assuming a /dashboard route
+      } else {
+        // Signup logic
+        if (formData.password !== formData.confirmPassword) {
+          toast.error('Passwords do not match.');
+          setIsLoading(false);
+          return;
+        }
+        const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        });
+        console.log('Signup successful', response.data);
+        toast.success('Account created successfully! Please log in.');
+        // Optionally switch to login form after successful signup
+        setIsLogin(true);
+        setFormData({ ...formData, name: '', password: '', confirmPassword: '' }); // Clear sensitive data
+      }
+    } catch (error: any) {
+      console.error('Authentication error', error.response?.data || error.message);
+      toast.error(error.response?.data?.message || 'Authentication failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

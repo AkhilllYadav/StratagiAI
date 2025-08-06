@@ -62,12 +62,12 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// StrategIQ Brand Colors
-				'violet-primary': 'hsl(var(--violet-primary))',
-				'sky-blue': 'hsl(var(--sky-blue))',
-				'sunset-orange': 'hsl(var(--sunset-orange))',
-				'lilac-pink': 'hsl(var(--lilac-pink))',
-				'light-yellow': 'hsl(var(--light-yellow))'
+				// AI-inspired Modern Light Colors
+				'ai-primary': 'hsl(var(--ai-primary))', // A clean, tech-inspired blue
+				'ai-secondary': 'hsl(var(--ai-secondary))', // A complementary light grey/blue
+				'ai-accent': 'hsl(var(--ai-accent))', // A vibrant but subtle accent color
+				'ai-background-light': 'hsl(var(--ai-background-light))', // Very light background
+				'ai-text-dark': 'hsl(var(--ai-text-dark))' // Dark text for readability
 			},
 			fontFamily: {
 				'heading': ['Inter', 'Poppins', 'system-ui', 'sans-serif'],
